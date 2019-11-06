@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server implements Runnable{
-    private final int port = 5000;
+    private final int port = 7777;
     private boolean running = true;
     private ServerSocket ss;
     private Socket socket = null;
@@ -36,29 +36,15 @@ public class Server implements Runnable{
                 reader = new BufferedReader(input);
                 String name = reader.readLine();
                 clients.add(new Client(socket, name));
+                System.out.println(clients.get(0).getName());
                 data.getList().add(new ArrayList<String[]>());
-
-                //Input
-                //input = new InputStreamReader(client.getInputStream());
-                //reader = new BufferedReader(input);
-                //Output
-                //output = new OutputStreamWriter(client.getOutputStream());
-                //writer = new BufferedWriter(output);
-
-
-
-                //receive data
-                //String message = reader.readLine();
-                //receive position
-                //send data
-                //send positon
 
                 socket.close();
             } catch(IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
 
-            System.out.println("disconnected");
+            System.out.println("Socket closed");
         } // end of while
         try {
             ss.close();
