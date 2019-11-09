@@ -1,5 +1,6 @@
 package connection;
 
+import gui.Console;
 import information.Data;
 
 import java.io.*;
@@ -35,10 +36,17 @@ public class Server implements Runnable{
                 input = new InputStreamReader(socket.getInputStream());
                 reader = new BufferedReader(input);
                 String name = reader.readLine();
-                clients.add(new Client(socket, name));
-                System.out.println(clients.get(0).getName());
+                for (int i = 0; i < clients.size(); i++){
+                    if (name.equals(clients.get(i).getName())){
+                        socket.close();
+                        socket = null;
+                    }
+                }
+                if (socket != null){
+                    clients.add(new Client(socket, name));
+                    Console.addMessage(clients.get(clients.size()).getName()+" has joined");
+                }
                 data.getList().add(new ArrayList<String[]>());
-
                 socket.close();
             } catch(IOException e) {
                 e.printStackTrace();

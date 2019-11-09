@@ -40,12 +40,13 @@ public class Data_Transfer implements Runnable {
                 output = new OutputStreamWriter(s.getClients().get(i).getOutputStream());
                 writer = new BufferedWriter(output);
                 for (int j = 0; j < message.length; j++){
+                    /*
                     try {
                         writer.write(message[j]);
                     } catch (IOException e){
                         e.printStackTrace();
                     }
-
+                    */
                 }
             }
         }
