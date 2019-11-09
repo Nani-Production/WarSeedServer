@@ -2,6 +2,7 @@ package sample;
 
 import connection.Data_Transfer;
 import connection.Server;
+import gui.Console;
 import gui.Gui;
 import information.Data;
 import javafx.application.Application;
@@ -9,7 +10,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    Gui g = new Gui();
+    public static Gui g = new Gui();
     Data d = new Data();
     Server s = new Server();
     static Thread info, connect;

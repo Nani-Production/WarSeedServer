@@ -1,6 +1,8 @@
 package gui;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -23,6 +25,9 @@ public class Gui {
     private Canvas canvas_main;
     private Scene scene;
     private StackPane root;
+    private TextArea area;
+    private TextField ip;
+    private Button start;
     InetAddress addr = null;
     //public Font myFont = Font.loadFont(getClass().getResourceAsStream("/resources/Guardians.ttf"), 24);
 
@@ -37,11 +42,23 @@ public class Gui {
 
     public void create (Stage stage) {
 
-        TextArea area = new TextArea("with style kek");
-        TextField ip = new TextField(addr.getHostAddress());
-        Button start = new Button("Start Server");
+        area = new TextArea("");
+        area.setMinSize(100, 100);
+        area.setMaxSize(200, 100);
+        area.setTranslateY(100);
+        area.setEditable(false);
+        area.setVisible(true);
+        Console.addMessage("Server is started");
 
-        start.setTranslateX(-200);
+        ip = new TextField(addr.getHostAddress());
+        ip.setTranslateY(-75);
+        ip.setMinSize(100, 50);
+        ip.setMaxSize(110, 50);
+        ip.setVisible(true);
+        ip.setEditable(false);
+        ip.setDisable(true);
+
+        start = new Button("Start Server");
         start.setMaxSize(100, 50);
         start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -51,20 +68,6 @@ public class Gui {
             }
         });
         start.setVisible(true);
-
-        ip.setTranslateX(-500);
-        ip.setTranslateY(-300);
-        ip.setMinSize(100, 50);
-        ip.setMaxSize(110, 50);
-        ip.setVisible(true);
-        ip.setEditable(false);
-        ip.setDisable(true);
-        System.out.println("layout  "+ip.getLayoutX()+"  "+ip.getLayoutY()+"\nTranslate   "+ip.getTranslateX()+"   "+ip.getTranslateY());
-
-        area.setMinSize(100, 100);
-        area.setMaxSize(100, 100);
-        area.setVisible(true);
-        System.out.println("layout  "+area.getLayoutX()+"  "+area.getLayoutY()+"\nTranslate   "+area.getTranslateX()+"   "+area.getTranslateY());
 
         canvas_main = new Canvas(width, height);
         root = new StackPane();
@@ -88,5 +91,10 @@ public class Gui {
                 System.exit(0);
             }
         });
+    }
+
+    public void updateConsole(){
+        area.setText(Console.printMessages());
+        area.setScrollTop(Double.MAX_VALUE);
     }
 }
