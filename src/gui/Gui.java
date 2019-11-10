@@ -20,7 +20,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class Gui {
-    public static double width = 1280, height = 720;
+    public static double width = 500, height = 400;
     public static GraphicsContext gc_main;
     private Canvas canvas_main;
     private Scene scene;

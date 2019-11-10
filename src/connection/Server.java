@@ -44,7 +44,7 @@ public class Server implements Runnable{
                 }
                 if (socket != null){
                     clients.add(new Client(socket, name));
-                    Console.addMessage(clients.get(clients.size()).getName()+" has joined");
+                    Console.addMessage(clients.get(clients.size()-1).getName()+" has joined");
                 }
                 data.getList().add(new ArrayList<String[]>());
                 socket.close();

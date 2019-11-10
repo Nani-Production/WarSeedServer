@@ -9,7 +9,7 @@ public class Console {
     private static ArrayList<String> messages = new ArrayList<>();
 
     public static void addMessage(String s){
-        //mit Zeitstempel?
+        //TODO mit Zeitstempel?
         messages.add(s);
         Main.g.updateConsole();
     }

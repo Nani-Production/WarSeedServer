@@ -20,6 +20,7 @@ public class Data_Transfer implements Runnable {
     @Override
     public void run() {
         while (running){
+            //TODO die Daten sende, verarbeiten und schicken
             String message [] = new String [s.getClients().size()];
             //Input
             for (int i = 0; i < s.getClients().size(); i++){
