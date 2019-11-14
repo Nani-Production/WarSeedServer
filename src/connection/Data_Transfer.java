@@ -23,14 +23,23 @@ public class Data_Transfer implements Runnable {
             //TODO die Daten sende, verarbeiten und schicken
             String message [] = new String [s.getClients().size()];
             //Input
-            for (int i = 0; i < s.getClients().size(); i++){
 
+            if (s.getClients().size() > 0){
+                System.out.println(s.getClients().size());
+            }
+
+            for (int i = 0; i < s.getClients().size(); i++){
+                System.out.println("read messages");
                 input = new InputStreamReader(s.getClients().get(i).getInputStream());
                 reader = new BufferedReader(input);
                 try {
-                    message[i] = reader.readLine();
+                    System.out.println(reader.lines().count());
+                    for (int j = 0; j < reader.lines().count(); j++){
+                        //message[j] = reader.readLine();
+                        //System.out.println(message[j]);
+                        System.out.println(reader.readLine());
+                    }
 
-                    System.out.println(message[i]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

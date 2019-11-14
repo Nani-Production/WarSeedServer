@@ -47,12 +47,9 @@ public class Server implements Runnable{
                     Console.addMessage(clients.get(clients.size()-1).getName()+" has joined");
                 }
                 data.getList().add(new ArrayList<String[]>());
-                socket.close();
             } catch(IOException e) {
                 e.printStackTrace();
             }
-
-            System.out.println("Socket closed");
         } // end of while
         try {
             ss.close();
