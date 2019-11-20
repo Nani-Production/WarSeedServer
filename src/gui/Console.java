@@ -17,7 +17,6 @@ public class Console {
     public static String printMessages(){
         StringBuilder printing = new StringBuilder();
         for (int i = 0; i < messages.size(); i++){
-            System.out.println("size: "+messages.size()+"   "+i);
             printing.append(messages.get(i)).append("\n");
         }
         //System.out.println(printing.toString().length());

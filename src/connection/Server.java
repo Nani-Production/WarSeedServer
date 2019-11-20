@@ -1,7 +1,7 @@
 package connection;
 
 import gui.Console;
-import information.Data;
+import data.Data;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -31,21 +31,22 @@ public class Server implements Runnable{
             System.out.println("Searching for connection...");
             try {
                 //Connecting
-                socket = ss.accept();
-                System.out.println("Client connected");
-                input = new InputStreamReader(socket.getInputStream());
-                reader = new BufferedReader(input);
-                String name = reader.readLine();
-                for (int i = 0; i < clients.size(); i++){
-                    if (name.equals(clients.get(i).getName())){
-                        socket.close();
-                        socket = null;
-                    }
+                int index = 0;
+                clients.add(new Client(new Socket()));
+                clients.get(clients.size()-1).setSocket(ss.accept());
+                index = clients.size()-1;
+                clients.get(index).setOutput(new OutputStreamWriter(clients.get(index).getOutputStream()));
+                clients.get(index).setWriter(new PrintWriter(clients.get(index).getOutput()));
+
+                clients.get(index).setInput(new InputStreamReader(clients.get(index).getInputStream()));
+                clients.get(index).setReader(new BufferedReader(clients.get(index).getInput()));
+
+                String name = clients.get(index).getReader().readLine();
+                clients.get(index).setName(name);
+                if (clients.get(index).getSocket() != null){
+                    Console.addMessage(name+" has joined");
                 }
-                if (socket != null){
-                    clients.add(new Client(socket, name));
-                    Console.addMessage(clients.get(clients.size()-1).getName()+" has joined");
-                }
+                //TODO was machen bei gleichen Namen?
                 data.getList().add(new ArrayList<String[]>());
             } catch(IOException e) {
                 e.printStackTrace();

@@ -1,17 +1,19 @@
 package connection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Client {
     private Socket socket;
     private String name;
+    private InputStreamReader input;
+    private OutputStreamWriter output;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
-    public Client (Socket socket, String name){
+    public Client (Socket socket){ //, String name
         this.socket = socket;
-        this.name = name;
+        //this.name = name;
     }
 
     public String getName() {
@@ -24,6 +26,42 @@ public class Client {
 
     public Socket getSocket() {
         return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public OutputStreamWriter getOutput() {
+        return output;
+    }
+
+    public void setOutput(OutputStreamWriter output) {
+        this.output = output;
+    }
+
+    public PrintWriter getWriter() {
+        return writer;
+    }
+
+    public void setWriter(PrintWriter writer) {
+        this.writer = writer;
+    }
+
+    public InputStreamReader getInput() {
+        return input;
+    }
+
+    public void setInput(InputStreamReader input) {
+        this.input = input;
+    }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
+
+    public void setReader(BufferedReader reader) {
+        this.reader = reader;
     }
 
     public InputStream getInputStream() {

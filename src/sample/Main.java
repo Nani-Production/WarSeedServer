@@ -2,9 +2,8 @@ package sample;
 
 import connection.Data_Transfer;
 import connection.Server;
-import gui.Console;
 import gui.Gui;
-import information.Data;
+import data.Data;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,7 +12,8 @@ public class Main extends Application {
     public static Gui g = new Gui();
     Data d = new Data();
     Server s = new Server();
-    static Thread info, connect;
+    public static Thread info;
+    static Thread connect;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
