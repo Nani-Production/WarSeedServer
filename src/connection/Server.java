@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+    //TODO TLS Handshake nachschauen für TCP/IP
 public class Server implements Runnable{
     private final int port = 7777;
     private boolean running = true;
@@ -36,18 +37,20 @@ public class Server implements Runnable{
                 clients.get(clients.size()-1).setSocket(ss.accept());
                 index = clients.size()-1;
                 clients.get(index).setOutput(new OutputStreamWriter(clients.get(index).getOutputStream()));
-                clients.get(index).setWriter(new PrintWriter(clients.get(index).getOutput()));
+                clients.get(index).setWriter(new BufferedWriter(clients.get(index).getOutput()));
 
-                clients.get(index).setInput(new InputStreamReader(clients.get(index).getInputStream()));
-                clients.get(index).setReader(new BufferedReader(clients.get(index).getInput()));
+                clients.get(index).getTube().setInput(new InputStreamReader(clients.get(index).getInputStream()));
+                clients.get(index).getTube().setReader(new BufferedReader(clients.get(index).getTube().getInput()));
 
-                String name = clients.get(index).getReader().readLine();
+                String name = clients.get(index).getTube().getReader().readLine();
                 clients.get(index).setName(name);
+                System.out.println("name im Server: "+clients.get(index).getName());
                 if (clients.get(index).getSocket() != null){
                     Console.addMessage(name+" has joined");
+                    Data_Transfer.startTubeThread(index, this);
+                    clients.get(index).setConnected(true);
                 }
                 //TODO was machen bei gleichen Namen?
-                data.getList().add(new ArrayList<String[]>());
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -58,7 +61,6 @@ public class Server implements Runnable{
             e.printStackTrace();
         }
     }
-
     public ArrayList<Client> getClients (){
         return clients;
     }

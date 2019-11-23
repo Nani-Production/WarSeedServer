@@ -6,14 +6,30 @@ import java.net.Socket;
 public class Client {
     private Socket socket;
     private String name;
-    private InputStreamReader input;
     private OutputStreamWriter output;
-    private PrintWriter writer;
-    private BufferedReader reader;
+    private BufferedWriter writer;
+    private Tube tube = new Tube();
+    private boolean connected = false;
 
     public Client (Socket socket){ //, String name
         this.socket = socket;
         //this.name = name;
+    }
+
+    public Tube getTube() {
+        return tube;
+    }
+
+    public void setTube(Tube tube) {
+        this.tube = tube;
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 
     public String getName() {
@@ -40,28 +56,12 @@ public class Client {
         this.output = output;
     }
 
-    public PrintWriter getWriter() {
+    public BufferedWriter getWriter() {
         return writer;
     }
 
-    public void setWriter(PrintWriter writer) {
+    public void setWriter(BufferedWriter writer) {
         this.writer = writer;
-    }
-
-    public InputStreamReader getInput() {
-        return input;
-    }
-
-    public void setInput(InputStreamReader input) {
-        this.input = input;
-    }
-
-    public BufferedReader getReader() {
-        return reader;
-    }
-
-    public void setReader(BufferedReader reader) {
-        this.reader = reader;
     }
 
     public InputStream getInputStream() {
