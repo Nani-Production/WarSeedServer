@@ -7,6 +7,13 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
     private InputStreamReader input;
     private BufferedReader reader;
     private ArrayList<String> buffer = new ArrayList<>();
+    private Server s;
+    private Client c;
+
+    public Tube(Server s, Client c) {
+        this.s = s;
+        this.c = c;
+    }
 
     @Override
     public void run() {
@@ -15,7 +22,11 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
             try {
                 line = reader.readLine();
             } catch (IOException e) {
-                e.printStackTrace();
+                if (e.toString().equals("java.net.SocketException: Connection reset by peer: socket read error")){
+                    s.disconnect(c);
+                } else {
+                    e.printStackTrace();
+                }
             } catch (NullPointerException ignore) {
                 System.out.println(ignore.toString()+"  Tube Nullpointer");
             }

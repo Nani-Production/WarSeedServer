@@ -4,6 +4,7 @@ import data.Data;
 import sample.Main;
 
 import java.io.*;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 public class Data_Transfer implements Runnable {
@@ -23,11 +24,17 @@ public class Data_Transfer implements Runnable {
             if (s.getClients().size() > 0){
                 //System.out.println("size: "+s.getClients().size());
                 if (receiveData()){
+                    processData();
                     sendData();
                 }
             }
         }
     }
+
+    private void processData() {
+
+    }
+
     private boolean receiveData (){
         boolean received = false;
         for (int i = 0; i < s.getClients().size(); i++){
@@ -57,7 +64,7 @@ public class Data_Transfer implements Runnable {
 
 
         for (int i = 0; i < Data.getListofLists().size(); i++){
-            if (Data.getListofLists().get(i).size() > 5){
+            if (Data.getListofLists().get(i).size() > 7){
                 listofCharacters.add(Data.getListofLists().get(i));
             } else {
                 listofBuildings.add(Data.getListofLists().get(i));
@@ -91,7 +98,11 @@ public class Data_Transfer implements Runnable {
                     s.getClients().get(i).getWriter().flush();
                 }
             } catch (IOException e){
-                e.printStackTrace();
+                if (e.toString().equals("java.net.SocketException: Connection reset by peer: socket write error")){
+                    s.disconnect(i);
+                } else {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -3,6 +3,8 @@ package data;
 import java.util.ArrayList;
 
 public class Data {
+    private Data_Processing dp = new Data_Processing();
+
     private static ArrayList <ArrayList<String>> listofLists = new ArrayList <ArrayList<String>>(); //x, y, name ??;
 
     public static ArrayList<ArrayList<String>> getListofLists() {
@@ -39,7 +41,7 @@ public class Data {
 
         for (int k = 0; k < substring.length; k++){
             int index1 = 0, index2 = 0;
-            String owner, type, hp, x, y;
+            String owner, type, hp, name, x, y;
             owner = substring[k].substring(0, (index1 = substring[k].indexOf("+++")));
             index2 = substring[k].indexOf("+++", index1+1);
             index1 += 3;
@@ -49,13 +51,21 @@ public class Data {
             hp = substring[k].substring(index1, index2);
             index1 = index2+3;
             index2 = substring[k].indexOf("+++", index1+1);
+            name = substring[k].substring(index1, index2);
+            index1 = index2+3;
+            index2 = substring[k].indexOf("+++", index1+1);
             x = substring[k].substring(index1, index2);
             y = substring[k].substring(index2+3);
+
+            if (name == null){
+                name = generateName(type);
+            }
 
             ArrayList<String> list = new ArrayList<>();
             list.add(owner);
             list.add(type);
             list.add(hp);
+            list.add(name);
             list.add(x);
             list.add(y);
 
@@ -109,6 +119,10 @@ public class Data {
             moveX = substring[k].substring(index1, index2);
             moveY = substring[k].substring(index2+3);
 
+            if (name == null){
+                name = generateName(type);
+            }
+
             ArrayList<String> list = new ArrayList<>();
             list.add(owner);
             list.add(type);
@@ -134,25 +148,21 @@ public class Data {
                 doubling = true;
             }
         }
-        if (!doubling){
-            return doubling;
-        } else {
-            return doubling;
-        }
+        return doubling;
     }
 
     private static boolean actualising (ArrayList<String> list){
         boolean actualising = false;
         for (int i = 0; i < listofLists.size(); i++){
             if (listofLists.get(i).get(0).equals(list.get(0)) && listofLists.get(i).get(1).equals(list.get(1)) && !listofLists.get(i).equals(list) && listofLists.get(i).size() == list.size()){
-                if (listofLists.get(i).size() > 5 && listofLists.get(i).get(3).equals(list.get(3))){
+                if (listofLists.get(i).size() > 7 && listofLists.get(i).get(3).equals(list.get(3))){ //character
                     listofLists.get(i).set(2, list.get(2));
                     listofLists.get(i).set(4, list.get(4));
                     listofLists.get(i).set(5, list.get(5));
                     listofLists.get(i).set(6, list.get(6));
                     listofLists.get(i).set(7, list.get(7));
                     actualising = true;
-                } else {
+                } else if (listofLists.get(i).get(3).equals(list.get(3))) { //building
                     listofLists.get(i).set(2, list.get(2));
                     listofLists.get(i).set(3, list.get(3));
                     listofLists.get(i).set(4, list.get(4));
@@ -160,11 +170,18 @@ public class Data {
                 }
             }
         }
-        if (actualising){
-            return actualising;
-        } else {
-            return actualising;
+        return actualising;
+    }
+
+    private static String generateName(String type){
+        int counter = 0;
+        for (int i = 0; i < listofLists.size(); i++){
+            if (listofLists.get(i).get(3).startsWith(type)){
+                counter++;
+            }
         }
+        counter++;
+        return type+counter;
     }
 }
 

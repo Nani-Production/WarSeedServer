@@ -33,7 +33,7 @@ public class Server implements Runnable{
             try {
                 //Connecting
                 int index = 0;
-                clients.add(new Client(new Socket()));
+                clients.add(new Client(new Socket(), this));
                 clients.get(clients.size()-1).setSocket(ss.accept());
                 index = clients.size()-1;
                 clients.get(index).setOutput(new OutputStreamWriter(clients.get(index).getOutputStream()));
@@ -63,5 +63,15 @@ public class Server implements Runnable{
     }
     public ArrayList<Client> getClients (){
         return clients;
+    }
+
+    public void disconnect (int i){
+        clients.get(i).setConnected(false);
+        clients.remove(i);
+    }
+
+    public void disconnect (Client c){
+        clients.get(clients.indexOf(c)).setConnected(false);
+        clients.remove(c);
     }
 }

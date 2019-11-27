@@ -4,16 +4,17 @@ import java.io.*;
 import java.net.Socket;
 
 public class Client {
+    private Server s;
     private Socket socket;
     private String name;
     private OutputStreamWriter output;
     private BufferedWriter writer;
-    private Tube tube = new Tube();
+    private Tube tube = new Tube(s, this);
     private boolean connected = false;
 
-    public Client (Socket socket){ //, String name
+    public Client (Socket socket, Server s){
         this.socket = socket;
-        //this.name = name;
+        this.s = s;
     }
 
     public Tube getTube() {
