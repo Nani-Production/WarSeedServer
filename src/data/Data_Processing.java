@@ -4,27 +4,34 @@ import java.util.ArrayList;
 
 public class Data_Processing {
 
-    public double[] moveCharacter (ArrayList<String> list){
-        double someX = Double.parseDouble(list.get(6)) -Double.parseDouble(list.get(4));
-        double someY = Double.parseDouble(list.get(7)) -Double.parseDouble(list.get(5));
+    public static double[] moveCharacter (ArrayList<String> list){
+        double newCoord [] = null;
+        if (list.get(7) == null || list.get(8) == null){
+            double someX = Double.parseDouble(list.get(7)) -Double.parseDouble(list.get(5));
+            double someY = Double.parseDouble(list.get(8)) -Double.parseDouble(list.get(6));
 
-        //TODO Einheitendatenbank? Damit man die Geschwindigkeit ziehen kann
-        double speed = 2; //?
+            //TODO Einheitendatenbank? Damit man die Geschwindigkeit ziehen kann
+            double speed = 2; //?
 
-        double newCoord [] = new double[2];
-        double v = speed / Math.sqrt(Math.pow(someX, 2) + Math.pow(someY, 2));
-        newCoord[0] = v * someX;
-        newCoord[1] = v * someY;
+            newCoord = new double[2];
+            double v = speed / Math.sqrt(Math.pow(someX, 2) + Math.pow(someY, 2));
+            newCoord[0] = v * someX;
+            newCoord[1] = v * someY;
 
+            if (newCoord [0] == Double.parseDouble(list.get(5)) && newCoord[1] == Double.parseDouble(list.get(6))){
+                list.set(7, null);
+                list.set(8, null);
+            }
+        }
         return newCoord;
     }
 
-    public void dealDamage (){
+    public static void dealDamage (){
 
     }
 
-    public boolean isDead(ArrayList<String> list){
-        if (Double.parseDouble(list.get(2)) <= 0) {
+    public static boolean isDead(ArrayList<String> list){
+        if (Double.parseDouble(list.get(3)) <= 0) {
             return true;
         } else {
             return false;
@@ -32,7 +39,7 @@ public class Data_Processing {
     }
 
     //soll in einem Thread aufgerufen werden bsp new Thread(new Runnable({@Override public run(){processCooldown()})}))
-    public boolean processCooldown (long ms){
+    public static boolean processCooldown (long ms){
         Timer timer = new Timer(ms);
         while (true){
             if (timer.process()){
@@ -41,3 +48,23 @@ public class Data_Processing {
         }
     }
 }
+
+/*
+list.add("building");
+            list.add(owner);
+            list.add(type);
+            list.add(hp);
+            list.add(name);
+            list.add(x);
+            list.add(y);
+
+list.add("character");
+        list.add(owner);
+        list.add(type);
+        list.add(hp);
+        list.add(name);
+        list.add(x);
+        list.add(y);
+        list.add(moveX);
+        list.add(moveY);
+ */

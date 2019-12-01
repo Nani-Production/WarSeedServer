@@ -1,6 +1,7 @@
 package connection;
 
 import data.Data;
+import data.Data_Processing;
 import sample.Main;
 
 import java.io.*;
@@ -20,7 +21,6 @@ public class Data_Transfer implements Runnable {
     @Override
     public void run() {
         while (true){
-            //TODO die Daten sende, verarbeiten und schicken
             if (s.getClients().size() > 0){
                 //System.out.println("size: "+s.getClients().size());
                 if (receiveData()){
@@ -32,7 +32,19 @@ public class Data_Transfer implements Runnable {
     }
 
     private void processData() {
+        //moving
+        double [] coord = new double[2];
+        for (int i = 0; i < Data.getListofLists().size(); i++){
+            coord = Data_Processing.moveCharacter(Data.getListofLists().get(i));
+            //TODO checking for collision
+            Data.getListofLists().get(i).set(5, Double.toString(coord[0]));
+            Data.getListofLists().get(i).set(6, Double.toString(coord[1]));
+        }
 
+        //fighting
+
+
+        //cooldown
     }
 
     private boolean receiveData (){
@@ -76,29 +88,29 @@ public class Data_Transfer implements Runnable {
                 if (s.getClients().get(i).isConnected()){
                     s.getClients().get(i).getWriter().write("//buildings"+listofBuildings.size()+"#");
                     for (int j = 0; j < listofBuildings.size(); j++){
-                        s.getClients().get(i).getWriter().write("//"+listofBuildings.get(j).get(0)+
-                                "+++"+listofBuildings.get(j).get(1)+
+                        s.getClients().get(i).getWriter().write("//"+listofBuildings.get(j).get(1)+
                                 "+++"+listofBuildings.get(j).get(2)+
                                 "+++"+listofBuildings.get(j).get(3)+
-                                "+++"+listofBuildings.get(j).get(4)+"*");
+                                "+++"+listofBuildings.get(j).get(4)+
+                                "+++"+listofBuildings.get(j).get(5)+"*");
                     }
                     s.getClients().get(i).getWriter().write("//characters"+listofCharacters.size()+"#");
                     for (int j = 0; j < listofCharacters.size(); j++){
-                        s.getClients().get(i).getWriter().write("+++"+listofCharacters.get(j).get(0)+
-                                "+++"+listofCharacters.get(j).get(1)+
+                        s.getClients().get(i).getWriter().write("+++"+listofCharacters.get(j).get(1)+
                                 "+++"+listofCharacters.get(j).get(2)+
                                 "+++"+listofCharacters.get(j).get(3)+
                                 "+++"+listofCharacters.get(j).get(4)+
                                 "+++"+listofCharacters.get(j).get(5)+
                                 "+++"+listofCharacters.get(j).get(6)+
-                                "+++"+listofCharacters.get(j).get(7)+"*");
+                                "+++"+listofCharacters.get(j).get(7)+
+                                "+++"+listofCharacters.get(j).get(8)+"*");
                     }
                     s.getClients().get(i).getWriter().write("//end");
                     s.getClients().get(i).getWriter().newLine();
                     s.getClients().get(i).getWriter().flush();
                 }
             } catch (IOException e){
-                if (e.toString().equals("java.net.SocketException: Connection reset by peer: socket write error")){
+                if (e.toString().startsWith("java.net.SocketException: Connection reset")){
                     s.disconnect(i);
                 } else {
                     e.printStackTrace();

@@ -22,7 +22,7 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
             try {
                 line = reader.readLine();
             } catch (IOException e) {
-                if (e.toString().equals("java.net.SocketException: Connection reset by peer: socket read error")){
+                if (e.toString().startsWith("java.net.SocketException: Connection reset")){
                     s.disconnect(c);
                 } else {
                     e.printStackTrace();
@@ -30,14 +30,16 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
             } catch (NullPointerException ignore) {
                 System.out.println(ignore.toString()+"  Tube Nullpointer");
             }
-            if (line.startsWith("//buildings")){ //Datensatz vom Client
-                buffer.add(line);
-            } else if (line.startsWith("//command")) { //Command for Server
+            if (line != null){
+                if (line.startsWith("//buildings")){ //Datensatz vom Client
+                    buffer.add(line);
+                } else if (line.startsWith("//command")) { //Command for Server
 
-            } else if (line.startsWith("//message")){ //Messsage for the chat
+                } else if (line.startsWith("//message")){ //Messsage for the chat
 
-            } else {
-                System.out.println("Error line of client has no use");
+                } else {
+                    System.out.println("Error line of client has no use");
+                }
             }
         }
     }

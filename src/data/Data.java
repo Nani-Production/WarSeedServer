@@ -3,8 +3,6 @@ package data;
 import java.util.ArrayList;
 
 public class Data {
-    private Data_Processing dp = new Data_Processing();
-
     private static ArrayList <ArrayList<String>> listofLists = new ArrayList <ArrayList<String>>(); //x, y, name ??;
 
     public static ArrayList<ArrayList<String>> getListofLists() {
@@ -15,7 +13,7 @@ public class Data {
         Data.listofLists = listofLists;
     }
 
-    //TODO überprüfen, ob sich Infos doppeln, aktualisieren und sich dann überschreiben
+    //TODO Timer funktionalität, den Angriff zwischen Einheiten verarbeiten
     public static void addData(String line){
         //Buildings
         int index = 0;
@@ -62,6 +60,7 @@ public class Data {
             }
 
             ArrayList<String> list = new ArrayList<>();
+            list.add("building");
             list.add(owner);
             list.add(type);
             list.add(hp);
@@ -124,6 +123,7 @@ public class Data {
             }
 
             ArrayList<String> list = new ArrayList<>();
+            list.add("character");
             list.add(owner);
             list.add(type);
             list.add(hp);
@@ -139,6 +139,22 @@ public class Data {
                 }
             }
         }
+
+        /*
+        final int[] cooldown = {5};
+        ArrayList <Thread> cooldowns = new ArrayList<>();
+        cooldowns.add(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (cooldown[0] != -1) {
+                    if (Data_Processing.processCooldown(cooldown[0])){
+                        cooldown[0] = -1;
+                    }
+                }
+            }
+        }));
+        cooldowns.get(cooldowns.size()).start();
+        */
     }
 
     private static boolean doubling (ArrayList<String> list) {
@@ -154,22 +170,22 @@ public class Data {
     private static boolean actualising (ArrayList<String> list){
         boolean actualising = false;
         for (int i = 0; i < listofLists.size(); i++){
-            if (listofLists.get(i).get(0).equals(list.get(0)) && listofLists.get(i).get(1).equals(list.get(1)) && !listofLists.get(i).equals(list) && listofLists.get(i).size() == list.size()){
-                if (listofLists.get(i).size() > 7 && listofLists.get(i).get(3).equals(list.get(3))){ //character
-                    listofLists.get(i).set(2, list.get(2));
-                    listofLists.get(i).set(4, list.get(4));
-                    listofLists.get(i).set(5, list.get(5));
-                    listofLists.get(i).set(6, list.get(6));
-                    listofLists.get(i).set(7, list.get(7));
-                    actualising = true;
-                } else if (listofLists.get(i).get(3).equals(list.get(3))) { //building
-                    listofLists.get(i).set(2, list.get(2));
-                    listofLists.get(i).set(3, list.get(3));
-                    listofLists.get(i).set(4, list.get(4));
-                    actualising = true;
+                if (listofLists.get(i).get(1).equals(list.get(1)) && listofLists.get(i).get(2).equals(list.get(2)) && !listofLists.get(i).equals(list) && listofLists.get(i).size() == list.size()){
+                    if (listofLists.get(i).get(0).equals("character") && listofLists.get(i).get(4).equals(list.get(4))){
+                        listofLists.get(i).set(3, list.get(3));
+                        listofLists.get(i).set(5, list.get(5));
+                        listofLists.get(i).set(6, list.get(6));
+                        listofLists.get(i).set(7, list.get(7));
+                        listofLists.get(i).set(8, list.get(8));
+                        actualising = true;
+                    } else if (listofLists.get(i).get(0).equals("building") && listofLists.get(i).get(4).equals(list.get(4))){
+                        listofLists.get(i).set(3, list.get(3));
+                        listofLists.get(i).set(5, list.get(5));
+                        listofLists.get(i).set(6, list.get(6));
+                        actualising = true;
+                    }
                 }
             }
-        }
         return actualising;
     }
 
