@@ -25,21 +25,31 @@ public class Data_Transfer implements Runnable {
                 sendData();
 
                 for (int i = 0; i < s.getClients().size(); i++){
-                    if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() > 10000){
+                    if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() > 10000 && s.getClients().get(i).isConnected()){
                         //Disconnect to this client
                         System.out.println("Client "+s.getClients().get(i).getName()+" is not responding");
                     }
                 }
 
+                System.out.println("running "+s.isGameRunning()+"   starting "+s.isStartingGame());
                 if (!s.isGameRunning() && !s.isStartingGame()){
                     boolean allReady = true;
-                    for (int i = 0; i < s.getClients().size(); i++){
-                        if (!s.getClients().get(i).isReady()){
+                    int counter = 0;
+
+                    for (int i = 0; i < s.getClients().size()-1; i++){
+                        if (!s.getClients().get(i).isReady() && s.getClients().get(i).isConnected()){
                             allReady = false;
                         }
+                        if (s.getClients().get(i).isConnected()){
+                            counter++;
+                        }
+                    }
+                    if (counter < 1){
+                        allReady = false;
                     }
                     if (allReady){
                         Main.g.getStartGame().setDisable(false);
+                        System.out.println("all clients ready");
                     } else {
                         Main.g.getStartGame().setDisable(true);
                     }
@@ -85,23 +95,30 @@ public class Data_Transfer implements Runnable {
     private void sendData (){
         for (int i = 0; i < s.getClients().size(); i++){
             long currentPong = System.currentTimeMillis();
-            if (s.getClients().get(i).isPong() && currentPong - s.getClients().get(i).getLastPong() > 1000){
+            if (s.getClients().get(i).isPong() && currentPong - s.getClients().get(i).getLastPong() > 1000 && s.getClients().get(i).isConnected()){
                 try {
                     s.getClients().get(i).getWriter().write("ping");
+                    s.getClients().get(i).getWriter().newLine();
+                    s.getClients().get(i).getWriter().flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 s.getClients().get(i).setPong(false);
+                s.getClients().get(i).setLastPong(System.currentTimeMillis());
             }
         }
 
 
         if (!s.isGameRunning() && s.isStartingGame()){
             for (int i = 0; i < s.getClients().size(); i++){
-                try {
-                    s.getClients().get(i).getWriter().write("//GameStarting//");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (s.getClients().get(i).isConnected()){
+                    try {
+                        s.getClients().get(i).getWriter().write("//GameStarting//");
+                        s.getClients().get(i).getWriter().newLine();
+                        s.getClients().get(i).getWriter().flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             s.setStartingGame(false);
