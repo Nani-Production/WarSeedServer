@@ -7,8 +7,8 @@ public class Data_Processing {
     public static double[] moveCharacter (ArrayList<String> list){
         double newCoord [] = null;
         if (list.get(7) == null || list.get(8) == null){
-            double someX = Double.parseDouble(list.get(7)) -Double.parseDouble(list.get(5));
-            double someY = Double.parseDouble(list.get(8)) -Double.parseDouble(list.get(6));
+            double someX = Double.parseDouble(list.get(7)) -Double.parseDouble(list.get(5)); //ZielpunktX - x
+            double someY = Double.parseDouble(list.get(8)) -Double.parseDouble(list.get(6)); //ZielpunktY - y
 
             //TODO Einheitendatenbank? Damit man die Geschwindigkeit ziehen kann
             double speed = 2; //?

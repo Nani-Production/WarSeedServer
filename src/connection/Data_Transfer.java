@@ -5,16 +5,13 @@ import data.Data_Processing;
 import sample.Main;
 
 import java.io.*;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 public class Data_Transfer implements Runnable {
-    boolean running = true;
-    private Server s = null;
-    private Data data;
+    private Server s;
     private static ArrayList<Thread> tubes = new ArrayList<>();
 
-    public Data_Transfer(Server s, Data d){
+    public Data_Transfer(Server s){
         this.s = s;
     }
 
@@ -22,10 +19,30 @@ public class Data_Transfer implements Runnable {
     public void run() {
         while (true){
             if (s.getClients().size() > 0){
-                //System.out.println("size: "+s.getClients().size());
                 if (receiveData()){
                     processData();
-                    sendData();
+                }
+                sendData();
+
+                for (int i = 0; i < s.getClients().size(); i++){
+                    if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() > 10000){
+                        //Disconnect to this client
+                        System.out.println("Client "+s.getClients().get(i).getName()+" is not responding");
+                    }
+                }
+
+                if (!s.isGameRunning() && !s.isStartingGame()){
+                    boolean allReady = true;
+                    for (int i = 0; i < s.getClients().size(); i++){
+                        if (!s.getClients().get(i).isReady()){
+                            allReady = false;
+                        }
+                    }
+                    if (allReady){
+                        Main.g.getStartGame().setDisable(false);
+                    } else {
+                        Main.g.getStartGame().setDisable(true);
+                    }
                 }
             }
         }
@@ -35,11 +52,13 @@ public class Data_Transfer implements Runnable {
         //moving
         double [] coord = new double[2];
         for (int i = 0; i < Data.getListofLists().size(); i++){
-            coord = Data_Processing.moveCharacter(Data.getListofLists().get(i));
-            //TODO checking for collision
-            Data.getListofLists().get(i).set(5, Double.toString(coord[0]));
-            Data.getListofLists().get(i).set(6, Double.toString(coord[1]));
-        }
+            if (Data.getListofLists().get(i).get(0).equals("//character")){
+                coord = Data_Processing.moveCharacter(Data.getListofLists().get(i));
+                //TODO checking for collision
+                Data.getListofLists().get(i).set(5, Double.toString(coord[0]));
+                Data.getListofLists().get(i).set(6, Double.toString(coord[1]));
+            }
+            }
 
         //fighting
 
@@ -51,14 +70,8 @@ public class Data_Transfer implements Runnable {
         boolean received = false;
         for (int i = 0; i < s.getClients().size(); i++){
             if (s.getClients().get(i).isConnected()){
-                //System.out.println("name: "+s.getClients().get(i).getName());
-                String message;
                 try {
-                    //message = s.getClients().get(i).getTube().getReader().readLine();
-                    //System.out.println("message "+message);
-                    //System.out.println("buffer"+i+": "+s.getClients().get(i).getTube().getBuffer().size());
                     for (int j = 0; j < s.getClients().get(i).getTube().getBuffer().size(); j++){
-                        //System.out.println(s.getClients().get(i).getTube().getBuffer().get(j));
                         Data.addData(s.getClients().get(i).getTube().getBuffer().get(j));
                         received = true;
                     }
@@ -70,6 +83,30 @@ public class Data_Transfer implements Runnable {
     }
 
     private void sendData (){
+        for (int i = 0; i < s.getClients().size(); i++){
+            long currentPong = System.currentTimeMillis();
+            if (s.getClients().get(i).isPong() && currentPong - s.getClients().get(i).getLastPong() > 1000){
+                try {
+                    s.getClients().get(i).getWriter().write("ping");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                s.getClients().get(i).setPong(false);
+            }
+        }
+
+
+        if (!s.isGameRunning() && s.isStartingGame()){
+            for (int i = 0; i < s.getClients().size(); i++){
+                try {
+                    s.getClients().get(i).getWriter().write("//GameStarting//");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            s.setStartingGame(false);
+            s.setGameRunning(true);
+        }
 
         ArrayList<ArrayList<String>> listofBuildings = new ArrayList<>();
         ArrayList<ArrayList<String>> listofCharacters = new ArrayList<>();
@@ -92,7 +129,8 @@ public class Data_Transfer implements Runnable {
                                 "+++"+listofBuildings.get(j).get(2)+
                                 "+++"+listofBuildings.get(j).get(3)+
                                 "+++"+listofBuildings.get(j).get(4)+
-                                "+++"+listofBuildings.get(j).get(5)+"*");
+                                "+++"+listofBuildings.get(j).get(5)+
+                                "+++"+listofBuildings.get(j).get(6)+"*");
                     }
                     s.getClients().get(i).getWriter().write("//characters"+listofCharacters.size()+"#");
                     for (int j = 0; j < listofCharacters.size(); j++){

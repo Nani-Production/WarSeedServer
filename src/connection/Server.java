@@ -11,7 +11,7 @@ import java.util.ArrayList;
     //TODO TLS Handshake nachschauen für TCP/IP
 public class Server implements Runnable{
     private final int port = 7777;
-    private boolean running = true;
+    private boolean running = true, gameRunning = false, startingGame = false;
     private ServerSocket ss;
     private Socket socket = null;
     private InputStreamReader input;
@@ -27,8 +27,9 @@ public class Server implements Runnable{
             e.printStackTrace();
         }
         data = new Data();
+        Console.addMessage("Server is started");
 
-        while (running) {
+        while (running && !gameRunning) {
             System.out.println("Searching for connection...");
             try {
                 //Connecting
@@ -74,4 +75,20 @@ public class Server implements Runnable{
         clients.get(clients.indexOf(c)).setConnected(false);
         clients.remove(c);
     }
-}
+
+        public boolean isGameRunning() {
+            return gameRunning;
+        }
+
+        public void setGameRunning(boolean gameRunning) {
+            this.gameRunning = gameRunning;
+        }
+
+        public boolean isStartingGame() {
+            return startingGame;
+        }
+
+        public void setStartingGame(boolean startingGame) {
+            this.startingGame = startingGame;
+        }
+    }

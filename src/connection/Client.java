@@ -10,11 +10,20 @@ public class Client {
     private OutputStreamWriter output;
     private BufferedWriter writer;
     private Tube tube = new Tube(s, this);
-    private boolean connected = false;
+    private boolean connected = false, ready = false, pong = true;
+    private long lastPong = System.currentTimeMillis();
 
     public Client (Socket socket, Server s){
         this.socket = socket;
         this.s = s;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 
     public Tube getTube() {
@@ -65,6 +74,14 @@ public class Client {
         this.writer = writer;
     }
 
+    public boolean isPong() {
+        return pong;
+    }
+
+    public void setPong(boolean pong) {
+        this.pong = pong;
+    }
+
     public InputStream getInputStream() {
         try {
             return socket.getInputStream();
@@ -81,6 +98,14 @@ public class Client {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public long getLastPong() {
+        return lastPong;
+    }
+
+    public void setLastPong(long lastPong) {
+        this.lastPong = lastPong;
     }
 }
 

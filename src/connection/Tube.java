@@ -1,5 +1,7 @@
 package connection;
 
+import gui.Console;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -37,8 +39,16 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
 
                 } else if (line.startsWith("//message")){ //Messsage for the chat
 
-                } else {
-                    System.out.println("Error line of client has no use");
+                } else if (line.startsWith("//Ready//")) {
+                    c.setReady(true);
+                    Console.addMessage(c.getName()+" is ready");
+                } else if (line.startsWith("//notReady//")) {
+                    c.setReady(false);
+                    Console.addMessage(c.getName()+" is not ready");
+                } else if (line.startsWith("pong")) {
+                    c.setPong(true);
+                }else {
+                        System.out.println("Error line of client has no use");
                 }
             }
         }

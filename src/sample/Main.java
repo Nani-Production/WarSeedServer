@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static Gui g = new Gui();
-    Data d = new Data();
-    Server s = new Server();
+    private static Data d = new Data();
+    private static Server s = new Server();
     public static Thread info;
     static Thread connect;
 
@@ -20,10 +20,13 @@ public class Main extends Application {
         g.init();
         g.create(primaryStage);
 
-        info = new Thread(new Data_Transfer(s, d));
+        info = new Thread(new Data_Transfer(s));
         connect = new Thread(s);
     }
 
+    public static void startGame(){
+        s.setStartingGame(true);
+    }
 
     public static void main(String[] args) {
         launch(args);
