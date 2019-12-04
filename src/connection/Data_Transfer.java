@@ -2,6 +2,7 @@ package connection;
 
 import data.Data;
 import data.Data_Processing;
+import gui.Console;
 import sample.Main;
 
 import java.io.*;
@@ -27,11 +28,10 @@ public class Data_Transfer implements Runnable {
                 for (int i = 0; i < s.getClients().size(); i++){
                     if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() > 10000 && s.getClients().get(i).isConnected()){
                         //Disconnect to this client
-                        System.out.println("Client "+s.getClients().get(i).getName()+" is not responding");
+                        Console.addMessage("Client "+s.getClients().get(i).getName()+" is not responding");
                     }
                 }
 
-                System.out.println("running "+s.isGameRunning()+"   starting "+s.isStartingGame());
                 if (!s.isGameRunning() && !s.isStartingGame()){
                     boolean allReady = true;
                     int counter = 0;
@@ -49,7 +49,7 @@ public class Data_Transfer implements Runnable {
                     }
                     if (allReady){
                         Main.g.getStartGame().setDisable(false);
-                        System.out.println("all clients ready");
+                        Console.addMessage("all clients ready");
                     } else {
                         Main.g.getStartGame().setDisable(true);
                     }
@@ -68,7 +68,7 @@ public class Data_Transfer implements Runnable {
                 Data.getListofLists().get(i).set(5, Double.toString(coord[0]));
                 Data.getListofLists().get(i).set(6, Double.toString(coord[1]));
             }
-            }
+        }
 
         //fighting
 
