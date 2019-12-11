@@ -67,7 +67,7 @@ public class Gui {
         startServer.setVisible(true);
 
         startGame = new Button("Start Game");
-        startGame.setTranslateY(-100);
+        startGame.setTranslateY(-75);
         startGame.setMaxSize(100, 50);
         startGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
