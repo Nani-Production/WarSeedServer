@@ -18,7 +18,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class Gui {
-    public static double width = 500, height = 400;
+    public static double width = 500, height = 600; //h400
     public static GraphicsContext gc_main;
     private Canvas canvas_main;
     private Scene scene;
@@ -42,8 +42,8 @@ public class Gui {
 
         area = new TextArea("");
         area.setMinSize(100, 100);
-        area.setMaxSize(200, 100);
-        area.setTranslateY(100);
+        area.setMaxSize(400, 300);
+        area.setTranslateY(120);
         area.setEditable(false);
         area.setVisible(true);
 
@@ -56,6 +56,7 @@ public class Gui {
         ip.setDisable(true);
 
         startServer = new Button("Start Server");
+        startServer.setTranslateY(-75);
         startServer.setMaxSize(100, 50);
         startServer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -67,7 +68,7 @@ public class Gui {
         startServer.setVisible(true);
 
         startGame = new Button("Start Game");
-        startGame.setTranslateY(-75);
+        startGame.setTranslateY(-150);
         startGame.setMaxSize(100, 50);
         startGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
