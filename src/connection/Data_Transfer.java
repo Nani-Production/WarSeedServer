@@ -158,7 +158,8 @@ public class Data_Transfer implements Runnable {
                                 "+++"+listofCharacters.get(j).get(6)+
                                 "+++"+listofCharacters.get(j).get(7)+
                                 "+++"+listofCharacters.get(j).get(8)+
-                                "+++"+listofCharacters.get(i).get(9)+"*");
+                                "+++"+listofCharacters.get(i).get(9)+
+                                "+++"+listofCharacters.get(i).get(10)+"*");
                     }
                     s.getClients().get(i).getWriter().write("//end");
                     s.getClients().get(i).getWriter().newLine();

@@ -96,7 +96,7 @@ public class Data {
 
         for (int k = 0; k < substring.length; k++){
             int index1 = 0, index2 = 0;
-            String owner, type, hp, x, y, name, moveX, moveY, angle;
+            String owner, type, hp, x, y, name, moveX, moveY, angle, canAttack;
             owner = substring[k].substring(0, (index1 = substring[k].indexOf("+++")));
             index2 = substring[k].indexOf("+++", index1+1);
             index1 += 3;
@@ -119,7 +119,10 @@ public class Data {
             index1 = index2+3;
             index2 = substring[k].indexOf("+++", index1+1);
             moveY = substring[k].substring(index1, index2);
-            angle = substring[k].substring(index2+3);
+            index1 = index2+3;
+            index2 = substring[k].indexOf("+++", index1+1);
+            angle = substring[k].substring(index1, index2);
+            canAttack = substring[k].substring(index2+3);
 
             if (name == null){
                 name = generateName(type);
@@ -136,6 +139,7 @@ public class Data {
             list.add(moveX);
             list.add(moveY);
             list.add(angle);
+            list.add(canAttack);
 
             if (!doubling(list)){
                 if (!actualising(list)){
