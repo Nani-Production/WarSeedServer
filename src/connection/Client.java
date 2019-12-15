@@ -10,12 +10,13 @@ public class Client {
     private OutputStreamWriter output;
     private BufferedWriter writer;
     private Tube tube = new Tube(s, this);
-    private boolean connected = false, ready = false, pong = true;
+    private boolean connected = false, ready = false, pong = true, noResponse = false;
     private long lastPong = System.currentTimeMillis();
 
     public Client (Socket socket, Server s){
         this.socket = socket;
         this.s = s;
+        //Tube tube = new Tube(s, this);
     }
 
     public boolean isReady() {
@@ -106,6 +107,14 @@ public class Client {
 
     public void setLastPong(long lastPong) {
         this.lastPong = lastPong;
+    }
+
+    public boolean isNoResponse() {
+        return noResponse;
+    }
+
+    public void setNoResponse(boolean noResponse) {
+        this.noResponse = noResponse;
     }
 }
 

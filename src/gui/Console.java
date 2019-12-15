@@ -3,14 +3,17 @@ package gui;
 import javafx.beans.value.ObservableValue;
 import sample.Main;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Console {
     private static ArrayList<String> messages = new ArrayList<>();
+    private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
     public static void addMessage(String s){
         //TODO mit Zeitstempel?
-        messages.add(s);
+        messages.add("["+format.format(Calendar.getInstance().getTime())+"] "+s);
         Main.g.updateConsole();
     }
 

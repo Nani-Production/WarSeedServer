@@ -39,7 +39,6 @@ public class Gui {
     }
 
     public void create (Stage stage) {
-
         area = new TextArea("");
         area.setMinSize(100, 100);
         area.setMaxSize(400, 300);
@@ -74,6 +73,7 @@ public class Gui {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Main.startGame();
+                startGame.setDisable(true);
             }
         });
         startGame.setDisable(true);

@@ -19,6 +19,11 @@ public class Data_Transfer implements Runnable {
     @Override
     public void run() {
         while (true){
+            try {
+                Main.info.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (s.getClients().size() > 0){
                 if (receiveData()){
                     processData();
@@ -26,9 +31,13 @@ public class Data_Transfer implements Runnable {
                 sendData();
 
                 for (int i = 0; i < s.getClients().size(); i++){
-                    if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() > 10000 && s.getClients().get(i).isConnected()){
-                        //Disconnect to this client
+                    if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() > 20000 && s.getClients().get(i).isConnected() && !s.getClients().get(i).isNoResponse()){
+                        //TODO Disconnect this client
                         Console.addMessage("Client "+s.getClients().get(i).getName()+" is not responding");
+                        s.getClients().get(i).setNoResponse(true);
+                    } else if (System.currentTimeMillis() - s.getClients().get(i).getLastPong() < 20000 && s.getClients().get(i).isConnected() && s.getClients().get(i).isNoResponse()) {
+                        Console.addMessage("Client "+s.getClients().get(i).getName()+" is responding again");
+                        s.getClients().get(i).setNoResponse(false);
                     }
                 }
 
@@ -40,11 +49,12 @@ public class Data_Transfer implements Runnable {
                         if (!s.getClients().get(i).isReady() && s.getClients().get(i).isConnected()){
                             allReady = false;
                         }
+
                         if (s.getClients().get(i).isConnected()){
                             counter++;
                         }
                     }
-                    if (counter < 1){
+                    if (counter <= 0){
                         allReady = false;
                     }
                     if (allReady){
@@ -59,15 +69,13 @@ public class Data_Transfer implements Runnable {
 
     private void processData() {
         //moving
-        double [] coord = new double[2];
         for (int i = 0; i < Data.getListofLists().size(); i++){
-            if (Data.getListofLists().get(i).get(0).equals("//character")){
-                coord = Data_Processing.moveCharacter(Data.getListofLists().get(i));
-                //TODO checking for collision
-                Data.getListofLists().get(i).set(5, Double.toString(coord[0]));
-                Data.getListofLists().get(i).set(6, Double.toString(coord[1]));
+            if (Data.getListofLists().get(i).get(0).equals("character")){
+                Data_Processing.moveCharacter(Data.getListofLists().get(i));
+               //TODO check for collision
             }
         }
+        Data_Processing.updateProjectiles();
 
         //fighting
 
@@ -81,7 +89,7 @@ public class Data_Transfer implements Runnable {
             if (s.getClients().get(i).isConnected()){
                 try {
                     for (int j = 0; j < s.getClients().get(i).getTube().getBuffer().size(); j++){
-                        Data.addData(s.getClients().get(i).getTube().getBuffer().get(j));
+                        Data.addData(s.getClients().get(i).getTube().getBuffer().get(j), s.getClients().get(i).getName());
                         received = true;
                     }
                     return received;
@@ -160,6 +168,14 @@ public class Data_Transfer implements Runnable {
                                 "+++"+listofCharacters.get(j).get(8)+
                                 "+++"+listofCharacters.get(i).get(9)+
                                 "+++"+listofCharacters.get(i).get(10)+"*");
+                    }
+                    s.getClients().get(i).getWriter().write("//projectiles"+Data.getProjectiles().size()+"#");
+                    for (int j = 0; j < Data.getProjectiles().size(); j++){
+                        s.getClients().get(i).getWriter().write("+++"+Data.getProjectiles().get(j).get(1)+
+                            "+++"+Data.getProjectiles().get(j).get(2)+
+                            "+++"+Data.getProjectiles().get(j).get(3)+
+                            "+++"+Data.getProjectiles().get(j).get(4)+
+                            "+++"+Data.getProjectiles().get(j).get(5)+"*");
                     }
                     s.getClients().get(i).getWriter().write("//end");
                     s.getClients().get(i).getWriter().newLine();

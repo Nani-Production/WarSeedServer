@@ -13,10 +13,6 @@ public class Server implements Runnable{
     private final int port = 7777;
     private boolean running = true, gameRunning = false, startingGame = false;
     private ServerSocket ss;
-    private Socket socket = null;
-    private InputStreamReader input;
-    private BufferedReader reader;
-    private Data data;
     private ArrayList<Client> clients = new ArrayList<>();
 
     @Override
@@ -26,7 +22,6 @@ public class Server implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        data = new Data();
         Console.addMessage("Server is started");
 
         while (running && !gameRunning) {
@@ -67,12 +62,15 @@ public class Server implements Runnable{
     }
 
     public void disconnect (int i){
+        System.out.println("User "+clients.get(i).getName()+" disconnected");
         clients.get(i).setConnected(false);
         clients.remove(i);
     }
 
     public void disconnect (Client c){
-        clients.get(clients.indexOf(c)).setConnected(false);
+        int index = clients.indexOf(c);
+        System.out.println("User "+clients.get(index).getName()+" disconnected");
+        clients.get(index).setConnected(false);
         clients.remove(c);
     }
 

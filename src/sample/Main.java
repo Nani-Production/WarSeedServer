@@ -2,6 +2,7 @@ package sample;
 
 import connection.Data_Transfer;
 import connection.Server;
+import gui.Console;
 import gui.Gui;
 import data.Data;
 import javafx.application.Application;
@@ -26,6 +27,7 @@ public class Main extends Application {
 
     public static void startGame(){
         s.setStartingGame(true);
+        Console.addMessage("game started");
     }
 
     public static void main(String[] args) {
@@ -35,5 +37,22 @@ public class Main extends Application {
     public static void startServer(){
         connect.start();
         info.start();
+    }
+
+    public static String countReadyClients(){
+        int counter1 = 0, counter2 = 0;
+        for (int i = 0; i < s.getClients().size(); i++){
+            if (s.getClients().get(i).isConnected() && s.getClients().get(i).isReady() && !s.getClients().get(i).isNoResponse()){
+                counter1++;
+            }
+            if (s.getClients().get(i).isConnected()){
+                counter2++;
+            }
+        }
+        if (counter1 == counter2){
+            return "["+counter1+"/"+counter2+"]";
+        } else {
+            return "all";
+        }
     }
 }

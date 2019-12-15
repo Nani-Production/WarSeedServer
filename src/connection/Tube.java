@@ -1,6 +1,7 @@
 package connection;
 
 import gui.Console;
+import sample.Main;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -25,7 +26,9 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
                 line = reader.readLine();
             } catch (IOException e) {
                 if (e.toString().startsWith("java.net.SocketException: Connection reset")){
-                    s.disconnect(c);
+                    try {
+                        s.disconnect(c);
+                    } catch (NullPointerException n){}
                 } else {
                     e.printStackTrace();
                 }
@@ -42,9 +45,11 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
                 } else if (line.startsWith("//Ready//")) {
                     c.setReady(true);
                     Console.addMessage(c.getName()+" is ready");
+                    Console.addMessage(Main.countReadyClients()+" are ready");
                 } else if (line.startsWith("//notReady//")) {
                     c.setReady(false);
                     Console.addMessage(c.getName()+" is not ready");
+                    Console.addMessage(Main.countReadyClients()+" are ready");
                 } else if (line.startsWith("pong")) {
                     c.setPong(true);
                     System.out.println("pong");
