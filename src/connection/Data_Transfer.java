@@ -71,10 +71,7 @@ public class Data_Transfer implements Runnable {
         //moving
         for (int i = 0; i < Data.getListofLists().size(); i++){
             if (Data.getListofLists().get(i).get(0).equals("character")){
-                double newCoord[] = Data_Processing.moveCharacter(Data.getListofLists().get(i));
-                if (newCoord == null){
-                    System.out.println("finished?"+i+" "+Data.getListofLists().get(i).get(7)+"   "+Data.getListofLists().get(i).get(8));
-                }
+                Data_Processing.moveCharacter(Data.getListofLists().get(i));
                 /*
                 try {
                     Data.getListofLists().get(i).set(7, String.valueOf(newCoord[0]));

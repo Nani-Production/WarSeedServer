@@ -52,7 +52,7 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
                     Console.addMessage(Main.countReadyClients()+" are ready");
                 } else if (line.startsWith("pong")) {
                     c.setPong(true);
-                    System.out.println("pong");
+                    //System.out.println("pong");
                     c.setLastPong(System.currentTimeMillis());
                 }else {
                         System.out.println("Error line of client has no use");

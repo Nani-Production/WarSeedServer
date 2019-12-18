@@ -143,9 +143,16 @@ public class Data {
             list.add(angle);
             list.add(canAttack);
 
-            if (!doubling(list)) {
-                if (!actualising(list)) {
+            System.out.println(k+" x: "+x+"   y: "+y);
+
+            if (doubling(list)){
+                System.out.println(k+" it doubles");
+            } else {
+                if (actualising(list)){
+                    System.out.println(k+" it is actualised");
+                } else {
                     listofLists.add(list);
+                    System.out.println(k+" size: "+listofLists.size());
                 }
             }
             //TODO ausgabe wegmachen
@@ -234,30 +241,29 @@ public class Data {
     }
 
     private static boolean doubling(ArrayList<String> list) {
-        boolean doubling = false;
         for (int i = 0; i < listofLists.size(); i++) {
-            if (listofLists.get(i).equals(list)) {
-                doubling = true;
+            if (listofLists.get(i).size() == (list.size())){
+                boolean doubling = true;
+                for (int j = 0; j < list.size(); j++){
+                    if (listofLists.get(i).get(j) != list.get(j)){
+                        doubling = false;
+                    }
+                }
+                if (doubling){
+                    return true;
+                }
             }
         }
-        return doubling;
+        return false;
     }
 
     private static boolean actualising(ArrayList<String> list) {
         boolean actualising = false;
         for (int i = 0; i < listofLists.size(); i++) {
-            if (listofLists.get(i).get(1).equals(list.get(1)) && listofLists.get(i).get(2).equals(list.get(2)) && !listofLists.get(i).equals(list) && listofLists.get(i).size() == list.size()) {
-                if (listofLists.get(i).get(0).equals("character") && listofLists.get(i).get(4).equals(list.get(4))) {
-                    listofLists.get(i).set(3, list.get(3));
-                    listofLists.get(i).set(5, list.get(5));
-                    listofLists.get(i).set(6, list.get(6));
-                    listofLists.get(i).set(7, list.get(7));
-                    listofLists.get(i).set(8, list.get(8));
-                    actualising = true;
-                } else if (listofLists.get(i).get(0).equals("building") && listofLists.get(i).get(4).equals(list.get(4))) {
-                    listofLists.get(i).set(3, list.get(3));
-                    listofLists.get(i).set(5, list.get(5));
-                    listofLists.get(i).set(6, list.get(6));
+            if (listofLists.get(i).get(0).equals(list.get(0)) && listofLists.get(i).get(1).equals(list.get(1)) && listofLists.get(i).get(2).equals(list.get(2)) && listofLists.get(i).size() == list.size()) {
+                if (listofLists.get(i).get(4).equals(list.get(4))) {
+                    System.out.println("actualising 1. "+listofLists.get(i).get(5)+" "+listofLists.get(i).get(6)+"    2. "+list.get(5)+" "+list.get(6));
+                    listofLists.set(i, list);
                     actualising = true;
                 }
             }

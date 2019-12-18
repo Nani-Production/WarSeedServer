@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Data_Processing {
 
-    public static double[] moveCharacter(ArrayList<String> list) {
+    public static void moveCharacter(ArrayList<String> list) {
         double newCoord[] = null;
         double speed = Double.parseDouble(UnitDatabank.getUnitInfo(Integer.parseInt(list.get(2)), "speed"));
         double someX, someY, moveX = -1, moveY = -1, nowX = -1, nowY = -1;
@@ -23,6 +23,7 @@ public class Data_Processing {
         //true   true
         //false  false
          */
+        System.out.println("lol1 "+list.get(7)+"   "+list.get(8));
 
 
         if (list.get(5) != list.get(7) && list.get(6) != list.get(8)) {
@@ -45,6 +46,8 @@ public class Data_Processing {
             }
 
             if (formatsucessfull && moving) {
+                //System.out.println("lol2 "+moveX+"   "+moveY);
+
                 someX = moveX - nowX; //ZielpunktX - x
                 someY = moveY - nowY; //ZielpunktY - y
 
@@ -85,16 +88,15 @@ public class Data_Processing {
                 }
                 list.set(5, Double.toString(nowX));
                 list.set(6, Double.toString(nowY));
-                if (xFinished && yFinished) {
+                /*
+                if (!xFinished && !yFinished) {
                     System.out.println("move set null");
                     list.set(7, "null");
                     list.set(8, "null");
-                    newCoord = null;
                 }
-                return newCoord;
+                */
             }
         }
-        return null;
     }
 
     public static void updateProjectiles() {
