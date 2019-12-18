@@ -126,7 +126,7 @@ public class Data {
             angle = substring[k].substring(index1, index2);
             canAttack = substring[k].substring(index2 + 3);
 
-            if (name == null) {
+            if (name.equals("null")) {
                 name = generateName(type);
             }
 
@@ -149,16 +149,20 @@ public class Data {
                 }
             }
             //TODO ausgabe wegmachen
+            /*
             if (!moveX.equals("null") || !moveY.equals("null")){
                 System.out.println(moveX+"  lol   "+moveY);
             }
+            */
         }
-
+        /*
         //attacks
         index = line.indexOf("//attacks", 0);
         if (line.indexOf("#", index + 1) != -1) {
             //index += "//attacks".length();
             startIndex = index + 1;
+
+            System.out.println("1 start: "+index+"    end: "+startIndex);
 
             i = 0;
             while (startIndex < line.indexOf("//end") && startIndex > index) {
@@ -166,19 +170,23 @@ public class Data {
                     i++;
                 }
             }
+            System.out.println("2 start: "+index+"    end: "+startIndex);
+
             substring = new String[i];
             index += "//attacks".length();
-
+            //TODO lol
             for (int j = 0; j < i; j++) {
                 startIndex = line.indexOf("#", index + 1);
+                System.out.println("3 start: "+index+"    end: "+startIndex);
                 substring[j] = line.substring(index, startIndex);
                 index = startIndex + 1;
             }
 
             for (int k = 0; k < substring.length; k++) {
+                System.out.println(substring[k]);
                 String attacker, defender;
-                int index1, index2;
-                attacker = substring[k].substring(0, (index1 = substring[k].indexOf("+++")));
+                int index1;
+                attacker = substring[k].    substring(0, (index1 = substring[k].indexOf("+++")));
                 index1 += 3;
                 defender = substring[k].substring(index1, substring[k].length() - 3);
 
@@ -193,6 +201,7 @@ public class Data {
                     }
                 }
                 if (startX != -1 && startY != -1 && targetX != -1 && targetY != -1) {
+                    System.out.println("lol it kinda worked/ projectile will be created");
                     ArrayList<String> list = new ArrayList<>();
                     list.add(clientName);
                     list.add("p" + projectileCount); //name
@@ -204,9 +213,9 @@ public class Data {
                     list.add("false");
                     projectiles.add(list);
                 }
-
             }
         }
+        */
         /*
         final int[] cooldown = {5};
         ArrayList <Thread> cooldowns = new ArrayList<>();

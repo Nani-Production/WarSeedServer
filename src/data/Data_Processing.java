@@ -11,51 +11,88 @@ public class Data_Processing {
         boolean formatsucessfull = true, moving = true;
 
         //TODO dies und das
-
-        //System.out.println("i'm in");
-
-        try {
-            nowX  = Double.parseDouble(list.get(5));
-            nowY  = Double.parseDouble(list.get(6));
-            if (!list.get(7).equals("null")){
-                moveX = Double.parseDouble(list.get(7));
-                System.out.println("7 worked");
-            } else {
-                moving = false;
-            }
-            if (!list.get(8).equals("null")){
-                moveY = Double.parseDouble(list.get(8));
-                System.out.println("8 worked");
-            } else {
-                moving = false;
-            }
-        } catch (NumberFormatException e){
-            e.printStackTrace();
-            formatsucessfull = false;
-        }
-
-        if (formatsucessfull && moving){
-            someX = moveX -nowX; //ZielpunktX - x
-            someY = moveY -nowY; //ZielpunktY - y
-
-            newCoord = new double[2];
-            double v = speed / Math.sqrt(Math.pow(someX, 2) + Math.pow(someY, 2));
-            newCoord[0] = v * someX;
-            newCoord[1] = v * someY;
+        /*
+        //Ursprünglicher Code
+        System.out.println(list.get(7)+"   "+list.get(8));
+        System.out.println((list.get(7) != null)+"   "+(list.get(8) != null));
+        System.out.println((list.get(7) != "null")+"   "+(list.get(8) != "null"));
+        System.out.println(!list.get(7).equals("null")+"  "+!list.get(8).equals("null"));
+        //Ausgabe
+        //null   null
+        //true   true
+        //true   true
+        //false  false
+         */
 
 
-            if (list.get(5) != list.get(7) && list.get(6) != list.get(8)){
-                System.out.println(list.get(4)+" is moving");
+        if (list.get(5) != list.get(7) && list.get(6) != list.get(8)) {
+            try {
+                nowX = Double.parseDouble(list.get(5));
+                nowY = Double.parseDouble(list.get(6));
+                if (!list.get(7).equals("null")) {
+                    moveX = Double.parseDouble(list.get(7));
+                } else {
+                    moving = false;
+                }
+                if (!list.get(8).equals("null")) {
+                    moveY = Double.parseDouble(list.get(8));
+                } else {
+                    moving = false;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                formatsucessfull = false;
             }
 
-            if (newCoord [0] == Double.parseDouble(list.get(5)) && newCoord[1] == Double.parseDouble(list.get(6))){
-                list.set(7, "null");
-                list.set(8, "null");
-            } else {
-                list.set(5, Double.toString(newCoord[0]));
-                list.set(6, Double.toString(newCoord[1]));
+            if (formatsucessfull && moving) {
+                someX = moveX - nowX; //ZielpunktX - x
+                someY = moveY - nowY; //ZielpunktY - y
+
+                newCoord = new double[2];
+                double v = speed / Math.sqrt(Math.pow(someX, 2) + Math.pow(someY, 2));
+                newCoord[0] = v * someX;
+                newCoord[1] = v * someY;
+
+                nowX += newCoord[0];
+                nowY += newCoord[1];
+
+                boolean xFinished = false, yFinished = false;
+                if (moveX > nowX) {
+                    if (newCoord[0]+nowX <= moveX) {
+                        xFinished = true;
+                    } else {
+                        nowX = moveX;
+                    }
+                } else {
+                    if (newCoord[0]+nowX >= moveX) {
+                        xFinished = true;
+                    } else {
+                        nowX = moveX;
+                    }
+                }
+                if (moveY > nowY) {
+                    if (newCoord[1]+nowY <= moveY) {
+                        yFinished = true;
+                    } else {
+                        nowY = moveY;
+                    }
+                } else {
+                    if (newCoord[1]+nowY >= moveY) {
+                        yFinished = true;
+                    } else {
+                        nowY = moveY;
+                    }
+                }
+                list.set(5, Double.toString(nowX));
+                list.set(6, Double.toString(nowY));
+                if (xFinished && yFinished) {
+                    System.out.println("move set null");
+                    list.set(7, "null");
+                    list.set(8, "null");
+                    newCoord = null;
+                }
+                return newCoord;
             }
-            return newCoord;
         }
         return null;
     }
@@ -121,28 +158,28 @@ public class Data_Processing {
         }
     }
 
-        public static void dealDamage () {
+    public static void dealDamage() {
 
+    }
+
+    public static boolean isDead(ArrayList<String> list) {
+        if (Double.parseDouble(list.get(3)) <= 0) {
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        public static boolean isDead (ArrayList < String > list) {
-            if (Double.parseDouble(list.get(3)) <= 0) {
+    //soll in einem Thread aufgerufen werden bsp new Thread(new Runnable({@Override public run(){processCooldown()})}))
+    public static boolean processCooldown(long ms) {
+        Timer timer = new Timer(ms);
+        while (true) {
+            if (timer.process()) {
                 return true;
-            } else {
-                return false;
-            }
-        }
-
-        //soll in einem Thread aufgerufen werden bsp new Thread(new Runnable({@Override public run(){processCooldown()})}))
-        public static boolean processCooldown ( long ms){
-            Timer timer = new Timer(ms);
-            while (true) {
-                if (timer.process()) {
-                    return true;
-                }
             }
         }
     }
+}
 
 /*
 list.add("building");

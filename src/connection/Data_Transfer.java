@@ -71,8 +71,20 @@ public class Data_Transfer implements Runnable {
         //moving
         for (int i = 0; i < Data.getListofLists().size(); i++){
             if (Data.getListofLists().get(i).get(0).equals("character")){
-                Data_Processing.moveCharacter(Data.getListofLists().get(i));
-               //TODO check for collision
+                double newCoord[] = Data_Processing.moveCharacter(Data.getListofLists().get(i));
+                if (newCoord == null){
+                    System.out.println("finished?"+i+" "+Data.getListofLists().get(i).get(7)+"   "+Data.getListofLists().get(i).get(8));
+                }
+                /*
+                try {
+                    Data.getListofLists().get(i).set(7, String.valueOf(newCoord[0]));
+                    Data.getListofLists().get(i).set(8, String.valueOf(newCoord[1]));
+                } catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+                 */
+
+                //TODO check for collision
             }
         }
         Data_Processing.updateProjectiles();
@@ -117,10 +129,12 @@ public class Data_Transfer implements Runnable {
 
 
         if (!s.isGameRunning() && s.isStartingGame()){
+            //TODO Map generieren
             for (int i = 0; i < s.getClients().size(); i++){
                 if (s.getClients().get(i).isConnected()){
                     try {
-                        s.getClients().get(i).getWriter().write("//GameStarting//");
+                        s.getClients().get(i).getWriter().write("//GameStarting");
+                        //TODO hier die Map schicken
                         s.getClients().get(i).getWriter().newLine();
                         s.getClients().get(i).getWriter().flush();
                     } catch (IOException e) {
