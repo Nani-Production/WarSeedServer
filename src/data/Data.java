@@ -19,10 +19,11 @@ public class Data {
     public static void addData(String line, String clientName) {
         //Buildings
         int index = 0;
-        index = line.indexOf("#");
+        index = line.indexOf("//buildings");
+        index = line.indexOf("#", index+1);
         index += 3;
 
-        int startIndex = 0;
+        int startIndex = index;
         int i = 0;
         while (startIndex < line.indexOf("//characters")) {
             if ((startIndex = line.indexOf("*", startIndex + 1)) != -1) {
@@ -143,24 +144,23 @@ public class Data {
             list.add(angle);
             list.add(canAttack);
 
-            System.out.println(k+" x: "+x+"   y: "+y);
+            /*
+            if (!moveX.equals("null") || !moveY.equals("null")){
+                System.out.println(moveX+"  lol   "+moveY);
+            }
+             */
 
             if (doubling(list)){
-                System.out.println(k+" it doubles");
+                //System.out.println(k+" it doubles");
             } else {
                 if (actualising(list)){
-                    System.out.println(k+" it is actualised");
+                    //System.out.println(k+" it is actualised");
                 } else {
                     listofLists.add(list);
                     System.out.println(k+" size: "+listofLists.size());
                 }
             }
             //TODO ausgabe wegmachen
-            /*
-            if (!moveX.equals("null") || !moveY.equals("null")){
-                System.out.println(moveX+"  lol   "+moveY);
-            }
-            */
         }
         /*
         //attacks
@@ -259,11 +259,23 @@ public class Data {
 
     private static boolean actualising(ArrayList<String> list) {
         boolean actualising = false;
+
+        /*
+        if (list.get(0).equals("character")){
+            if (!list.get(7).equals("null") || !list.get(8).equals("null")){
+                System.out.println("actualising0.25 "+list.get(7)+"    "+list.get(8));
+            }
+        }
+         */
+
         for (int i = 0; i < listofLists.size(); i++) {
             if (listofLists.get(i).get(0).equals(list.get(0)) && listofLists.get(i).get(1).equals(list.get(1)) && listofLists.get(i).get(2).equals(list.get(2)) && listofLists.get(i).size() == list.size()) {
                 if (listofLists.get(i).get(4).equals(list.get(4))) {
-                    System.out.println("actualising 1. "+listofLists.get(i).get(5)+" "+listofLists.get(i).get(6)+"    2. "+list.get(5)+" "+list.get(6));
-                    listofLists.set(i, list);
+                    if (listofLists.get(i).size() == list.size()){
+                        for (int j = 0; j < listofLists.get(i).size(); j++){
+                            listofLists.get(i).set(j, list.get(j));
+                        }
+                    }
                     actualising = true;
                 }
             }

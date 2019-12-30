@@ -1,8 +1,31 @@
 package data;
 
+import sample.Main;
+
 import java.util.ArrayList;
 
-public class Data_Processing {
+public class Data_Processing implements Runnable {
+    private int timeout = 1;
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Main.process.sleep(timeout);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            ArrayList<ArrayList<String>> processingList = Data.getListofLists();
+            System.out.println("processing");
+            for (int i = 0; i < processingList.size(); i++) {
+                if (processingList.get(i).get(0).equals("character")) {
+                    Data_Processing.moveCharacter(processingList.get(i));
+                    //TODO check for collision
+                }
+            }
+            Data_Processing.updateProjectiles();
+        }
+    }
 
     public static void moveCharacter(ArrayList<String> list) {
         double newCoord[] = null;
@@ -10,23 +33,7 @@ public class Data_Processing {
         double someX, someY, moveX = -1, moveY = -1, nowX = -1, nowY = -1;
         boolean formatsucessfull = true, moving = true;
 
-        //TODO dies und das
-        /*
-        //Ursprünglicher Code
-        System.out.println(list.get(7)+"   "+list.get(8));
-        System.out.println((list.get(7) != null)+"   "+(list.get(8) != null));
-        System.out.println((list.get(7) != "null")+"   "+(list.get(8) != "null"));
-        System.out.println(!list.get(7).equals("null")+"  "+!list.get(8).equals("null"));
-        //Ausgabe
-        //null   null
-        //true   true
-        //true   true
-        //false  false
-         */
-        System.out.println("lol1 "+list.get(7)+"   "+list.get(8));
-
-
-        if (list.get(5) != list.get(7) && list.get(6) != list.get(8)) {
+        if (!list.get(5).equals(list.get(7)) && !list.get(6).equals(list.get(8))) {
             try {
                 nowX = Double.parseDouble(list.get(5));
                 nowY = Double.parseDouble(list.get(6));
@@ -52,7 +59,7 @@ public class Data_Processing {
                 someY = moveY - nowY; //ZielpunktY - y
 
                 newCoord = new double[2];
-                double v = speed / Math.sqrt(Math.pow(someX, 2) + Math.pow(someY, 2));
+                double v = (speed) / Math.sqrt(Math.pow(someX, 2) + Math.pow(someY, 2));
                 newCoord[0] = v * someX;
                 newCoord[1] = v * someY;
 
@@ -61,26 +68,26 @@ public class Data_Processing {
 
                 boolean xFinished = false, yFinished = false;
                 if (moveX > nowX) {
-                    if (newCoord[0]+nowX <= moveX) {
+                    if (newCoord[0] + nowX <= moveX) {
                         xFinished = true;
                     } else {
                         nowX = moveX;
                     }
                 } else {
-                    if (newCoord[0]+nowX >= moveX) {
+                    if (newCoord[0] + nowX >= moveX) {
                         xFinished = true;
                     } else {
                         nowX = moveX;
                     }
                 }
                 if (moveY > nowY) {
-                    if (newCoord[1]+nowY <= moveY) {
+                    if (newCoord[1] + nowY <= moveY) {
                         yFinished = true;
                     } else {
                         nowY = moveY;
                     }
                 } else {
-                    if (newCoord[1]+nowY >= moveY) {
+                    if (newCoord[1] + nowY >= moveY) {
                         yFinished = true;
                     } else {
                         nowY = moveY;

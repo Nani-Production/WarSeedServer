@@ -36,7 +36,7 @@ public class Tube implements Runnable { //messages of clients wait in the tube u
                 System.out.println(ignore.toString()+"  Tube Nullpointer");
             }
             if (line != null){
-                if (line.startsWith("//buildings")){ //Datensatz vom Client
+                if (line.startsWith("//data")){ //Datensatz vom Client
                     buffer.add(line);
                 } else if (line.startsWith("//command")) { //Command for Server
 

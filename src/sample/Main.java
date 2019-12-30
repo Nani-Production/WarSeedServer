@@ -2,6 +2,7 @@ package sample;
 
 import connection.Data_Transfer;
 import connection.Server;
+import data.Data_Processing;
 import gui.Console;
 import gui.Gui;
 import data.Data;
@@ -13,7 +14,7 @@ public class Main extends Application {
     public static Gui g = new Gui();
     private static Data d = new Data();
     private static Server s = new Server();
-    public static Thread info;
+    public static Thread info, process;
     static Thread connect;
 
     @Override
@@ -22,12 +23,14 @@ public class Main extends Application {
         g.create(primaryStage);
 
         info = new Thread(new Data_Transfer(s));
+        process = new Thread(new Data_Processing());
         connect = new Thread(s);
     }
 
     public static void startGame(){
         s.setStartingGame(true);
         Console.addMessage("game started");
+        //process.start();
     }
 
     public static void main(String[] args) {
