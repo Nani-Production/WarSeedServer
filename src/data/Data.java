@@ -17,6 +17,7 @@ public class Data {
 
     //TODO Timer funktionalität, den Angriff zwischen Einheiten verarbeiten
     public static void addData(String line, String clientName) {
+        System.out.println(line);
         //Buildings
         int index = 0;
         index = line.indexOf("//buildings");
@@ -89,6 +90,9 @@ public class Data {
                 i++;
             }
         }
+        if (Integer.parseInt(line.substring(line.indexOf("//projectiles")+"//projectiles".length(), line.indexOf("#", line.indexOf("//projectiles")))) > 0){
+            i--;
+        }
         substring = new String[i];
 
         for (int j = 0; j < i; j++) {
@@ -98,51 +102,52 @@ public class Data {
         }
 
         for (int k = 0; k < substring.length; k++) {
-            int index1 = 0, index2 = 0;
-            String owner, type, hp, x, y, name, moveX, moveY, angle, canAttack;
-            owner = substring[k].substring(0, (index1 = substring[k].indexOf("+++")));
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            index1 += 3;
-            type = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            hp = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            name = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            x = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            y = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            moveX = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            moveY = substring[k].substring(index1, index2);
-            index1 = index2 + 3;
-            index2 = substring[k].indexOf("+++", index1 + 1);
-            angle = substring[k].substring(index1, index2);
-            canAttack = substring[k].substring(index2 + 3);
+            try {
+                int index1 = 0, index2 = 0;
+                String owner, type, hp, x, y, name, moveX, moveY, angle, canAttack;
+                owner = substring[k].substring(0, (index1 = substring[k].indexOf("+++")));
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                index1 += 3;
+                type = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                hp = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                name = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                x = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                y = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                moveX = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                moveY = substring[k].substring(index1, index2);
+                index1 = index2 + 3;
+                index2 = substring[k].indexOf("+++", index1 + 1);
+                angle = substring[k].substring(index1, index2);
+                canAttack = substring[k].substring(index2 + 3);
 
-            if (name.equals("null")) {
-                name = generateName(type);
-            }
+                if (name.equals("null")) {
+                    name = generateName(type);
+                }
 
-            ArrayList<String> list = new ArrayList<>();
-            list.add("character");
-            list.add(owner);
-            list.add(type);
-            list.add(hp);
-            list.add(name);
-            list.add(x);
-            list.add(y);
-            list.add(moveX);
-            list.add(moveY);
-            list.add(angle);
-            list.add(canAttack);
+                ArrayList<String> list = new ArrayList<>();
+                list.add("character");
+                list.add(owner);
+                list.add(type);
+                list.add(hp);
+                list.add(name);
+                list.add(x);
+                list.add(y);
+                list.add(moveX);
+                list.add(moveY);
+                list.add(angle);
+                list.add(canAttack);
 
             /*
             if (!moveX.equals("null") || !moveY.equals("null")){
@@ -150,26 +155,101 @@ public class Data {
             }
              */
 
-            if (doubling(list)){
-                //System.out.println(k+" it doubles");
-            } else {
-                if (actualising(list)){
-                    //System.out.println(k+" it is actualised");
+                if (doubling(list)){
+                    //System.out.println(k+" it doubles");
                 } else {
-                    listofLists.add(list);
-                    System.out.println(k+" size: "+listofLists.size());
+                    if (actualising(list)){
+                        //System.out.println(k+" it is actualised");
+                    } else {
+                        listofLists.add(list);
+                        System.out.println(k+" size: "+listofLists.size());
+                    }
+                }
+                //TODO ausgabe wegmachen
+            } catch (StringIndexOutOfBoundsException e){
+                e.printStackTrace();
+                System.out.println(substring[k]);
+            }
+        }
+
+        //projectiles
+        index = line.indexOf("#", index + 1);
+        index += 4;
+        startIndex = index + 1;
+
+        i = 0;
+        while (startIndex < line.indexOf("//attacks") && startIndex > index) {
+            if ((startIndex = line.indexOf("*", startIndex + 1)) != -1) {
+                i++;
+            }
+        }
+        substring = new String[i];
+
+        for (int j = 0; j < i; j++) {
+            startIndex = line.indexOf("*", index + 1);
+            substring[j] = line.substring(index, startIndex);
+            index = startIndex + 4;
+        }
+
+        //System.out.println("projectileSize in Data: "+substring.length);
+
+        for (int k = 0; k < substring.length; k++) {
+            int index1 = 0, index2 = 0;
+            String owner, name, nowX, nowY, moveX, moveY, arrived;
+            owner = substring[k].substring(0, (index1 = substring[k].indexOf("+++")));
+            index2 = substring[k].indexOf("+++", index1 + 1);
+            index1 += 3;
+            name = substring[k].substring(index1, index2);
+            index1 = index2+3;
+            index2 = substring[k].indexOf("+++", index1 + 1);
+            nowX = substring[k].substring(index1, index2);
+            index1 = index2+3;
+            index2 = substring[k].indexOf("+++", index1 + 1);
+            nowY = substring[k].substring(index1, index2);
+
+            index1 = index2 + 3;
+            index2 = substring[k].indexOf("+++", index1 + 1);
+            moveX = substring[k].substring(index1, index2);
+            index1 = index2 + 3;
+            index2 = substring[k].indexOf("+++", index1 + 1);
+            moveY = substring[k].substring(index1, index2);
+            arrived = substring[k].substring(index2 + 3);
+
+            ArrayList<String> list = new ArrayList<>();
+            list.add(owner);
+            list.add(name);
+            list.add(nowX);
+            list.add(nowY);
+            list.add(moveX);
+            list.add(moveY);
+            list.add(arrived);
+
+            boolean doubling = false, actualising = false;
+            for (int j = 0; j < projectiles.size(); j++) {
+                if (projectiles.get(j).equals(list)) {
+                    doubling = true;
+                }
+                if (!doubling && projectiles.get(j).get(0).equals(owner) && projectiles.get(j).get(1).equals(name)) {
+                    projectiles.get(j).set(2, nowX);
+                    projectiles.get(j).set(3, nowY);
+                    projectiles.get(j).set(4, moveX);
+                    projectiles.get(j).set(5, moveY);
+                    projectiles.get(j).set(6, arrived);
+                    actualising = true;
                 }
             }
-            //TODO ausgabe wegmachen
+            if (!doubling && !actualising) {
+                projectiles.add(list);
+            }
         }
-        /*
+
         //attacks
         index = line.indexOf("//attacks", 0);
         if (line.indexOf("#", index + 1) != -1) {
             //index += "//attacks".length();
             startIndex = index + 1;
 
-            System.out.println("1 start: "+index+"    end: "+startIndex);
+            //System.out.println("1 start: "+index+"    end: "+startIndex);
 
             i = 0;
             while (startIndex < line.indexOf("//end") && startIndex > index) {
@@ -177,20 +257,19 @@ public class Data {
                     i++;
                 }
             }
-            System.out.println("2 start: "+index+"    end: "+startIndex);
+            //System.out.println("2 start: "+index+"    end: "+startIndex);
 
             substring = new String[i];
             index += "//attacks".length();
             //TODO lol
             for (int j = 0; j < i; j++) {
                 startIndex = line.indexOf("#", index + 1);
-                System.out.println("3 start: "+index+"    end: "+startIndex);
+                //System.out.println("3 start: "+index+"    end: "+startIndex);
                 substring[j] = line.substring(index, startIndex);
                 index = startIndex + 1;
             }
 
             for (int k = 0; k < substring.length; k++) {
-                System.out.println(substring[k]);
                 String attacker, defender;
                 int index1;
                 attacker = substring[k].    substring(0, (index1 = substring[k].indexOf("+++")));
@@ -199,14 +278,15 @@ public class Data {
 
                 double startX = -1, startY = -1, targetX = -1, targetY = -1;
                 for (int f = 0; f < Data.getListofLists().size(); f++) {
-                    if (Data.getListofLists().get(f).get(4) == attacker && Data.getListofLists().get(f).get(4) == "character") {
+                    if (Data.getListofLists().get(f).get(4).equals(attacker) && Data.getListofLists().get(f).get(0).equals("character")) {
                         startX = Double.parseDouble(Data.getListofLists().get(f).get(5)) + 32;
                         startY = Double.parseDouble(Data.getListofLists().get(f).get(6)) + 32;
-                    } else if (Data.getListofLists().get(f).get(4) == defender && Data.getListofLists().get(f).get(4) == "character") {
+                    } else if (Data.getListofLists().get(f).get(4).equals(defender) && Data.getListofLists().get(f).get(0).equals("character")) {
                         targetX = Double.parseDouble(Data.getListofLists().get(f).get(5)) + 32;
                         targetY = Double.parseDouble(Data.getListofLists().get(f).get(6)) + 32;
                     }
                 }
+
                 if (startX != -1 && startY != -1 && targetX != -1 && targetY != -1) {
                     System.out.println("lol it kinda worked/ projectile will be created");
                     ArrayList<String> list = new ArrayList<>();
@@ -222,7 +302,7 @@ public class Data {
                 }
             }
         }
-        */
+
         /*
         final int[] cooldown = {5};
         ArrayList <Thread> cooldowns = new ArrayList<>();

@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -91,6 +92,7 @@ public class Gui {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.centerOnScreen();
+        //stage.getIcons().add(new Image(String.valueOf(Gui.class.getResource("/rsc/server_icon.png"))));
         stage.show();
 
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {

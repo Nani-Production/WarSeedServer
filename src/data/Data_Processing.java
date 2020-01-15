@@ -108,12 +108,12 @@ public class Data_Processing implements Runnable {
 
     public static void updateProjectiles() {
         for (int i = 0; i < Data.getProjectiles().size(); i++) {
-            if (Data.getProjectiles().get(i).get(6) == "true") {
+            if (Data.getProjectiles().get(i).get(6).equals("true")) {
                 Data.getProjectiles().remove(i);
                 i--;
             } else {
                 boolean formatsucessfull = true;
-                double someX, someY, moveX = -1, moveY = -1, nowX = -1, nowY = -1, speed = 1.;
+                double someX, someY, moveX = -1, moveY = -1, nowX = -1, nowY = -1, speed = 4.;
                 try {
                     nowX = Double.parseDouble(Data.getProjectiles().get(i).get(2));
                     nowY = Double.parseDouble(Data.getProjectiles().get(i).get(3));
@@ -133,28 +133,29 @@ public class Data_Processing implements Runnable {
                     newCoord[0] = v * someX;
                     newCoord[1] = v * someY;
 
-                    if (newCoord[0] == nowX && newCoord[1] == nowY) {
+                    if (newCoord[0]+nowX == nowX && newCoord[1]+nowY == nowY) {
                         nowX = -1;
                         nowY = -1;
                     } else {
-                        Data.getProjectiles().get(i).set(2, Double.toString(newCoord[0]));
-                        Data.getProjectiles().get(i).set(3, Double.toString(newCoord[1]));
+                        Data.getProjectiles().get(i).set(2, Double.toString(nowX+newCoord[0]));
+                        Data.getProjectiles().get(i).set(3, Double.toString(nowY+newCoord[1]));
+
                         boolean xFinished = false, yFinished = false;
                         if (moveX > nowX) {
-                            if (newCoord[0] > moveX) {
+                            if (newCoord[0]+nowX > moveX) {
                                 xFinished = true;
                             }
                         } else {
-                            if (newCoord[0] < moveX) {
+                            if (newCoord[0]+nowX < moveX) {
                                 xFinished = true;
                             }
                         }
                         if (moveY > nowY) {
-                            if (newCoord[1] > moveY) {
+                            if (newCoord[1]+nowY > moveY) {
                                 yFinished = true;
                             }
                         } else {
-                            if (newCoord[1] < moveY) {
+                            if (newCoord[1]+nowY < moveY) {
                                 yFinished = true;
                             }
                         }

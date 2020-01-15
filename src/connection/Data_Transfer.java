@@ -248,11 +248,13 @@ public class Data_Transfer implements Runnable {
         }
         line.append("//projectiles" + Data.getProjectiles().size() + "#");
         for (int j = 0; j < Data.getProjectiles().size(); j++) {
-            line.append("+++" + Data.getProjectiles().get(j).get(1) +
+            line.append("+++" + Data.getProjectiles().get(j).get(0) +
+                    "+++" + Data.getProjectiles().get(j).get(1) +
                     "+++" + Data.getProjectiles().get(j).get(2) +
                     "+++" + Data.getProjectiles().get(j).get(3) +
                     "+++" + Data.getProjectiles().get(j).get(4) +
-                    "+++" + Data.getProjectiles().get(j).get(5) + "*");
+                    "+++" + Data.getProjectiles().get(j).get(5) +
+                    "+++" + Data.getProjectiles().get(j).get(6) +"*");
         }
         line.append("//end\n");
         writeFile(line.toString());

@@ -3,11 +3,14 @@ package sample;
 import connection.Data_Transfer;
 import connection.Server;
 import data.Data_Processing;
+import data.UnitDatabank;
 import gui.Console;
 import gui.Gui;
 import data.Data;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -30,6 +33,7 @@ public class Main extends Application {
     public static void startGame(){
         s.setStartingGame(true);
         Console.addMessage("game started");
+        addSomeCharacters();
         //process.start();
     }
 
@@ -57,5 +61,21 @@ public class Main extends Application {
         } else {
             return "all";
         }
+    }
+
+    private static void addSomeCharacters(){
+        ArrayList<String> list = new ArrayList<>();
+        list.add("character");
+        list.add("Enemy");
+        list.add(String.valueOf(UnitDatabank.TANK));
+        list.add("30");
+        list.add("tank3");
+        list.add("400");
+        list.add("400");
+        list.add("null");
+        list.add("null");
+        list.add("255");
+        list.add("true");
+        Data.getListofLists().add(list);
     }
 }
